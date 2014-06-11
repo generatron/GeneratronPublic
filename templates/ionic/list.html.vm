@@ -1,0 +1,21 @@
+#set ($language="JavaScript")
+#set ($description="Packaging Information")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="${entity.getVariableName()}s.html")
+#set ($filename="${outputDir}/${project.name}/www/templates/${filep}")
+#parse("common/utils.parse")
+#parse("common/xmlHeader.parse")
+<ion-view title="${entity.name}">
+  <ion-content class="has-header">
+    <ion-list>
+      <ion-item ng-repeat="${entity.getVariableName()} in ${entity.getVariableName()}s" type="item-text-wrap">
+      	#foreach($item in $entity.attributesForAnnotation("ShowInCell"))
+        {{ ${entity.getVariableName()}.${item.name} }}<br>
+        #end
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
+
