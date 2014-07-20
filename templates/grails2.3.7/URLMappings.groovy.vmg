@@ -1,0 +1,39 @@
+#set ($language="Groovy")
+#set ($description="URL Mappings")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($filep="UrlMappings.groovy")
+#set ($filename="${outputDir}/${project.name}/grails-app/conf/${filep}")
+#parse("common/utils.parse")
+#parse("common/classHeader.parse")
+class UrlMappings {
+static mappings = {
+        "/${d}controller/${d}action?/${d}id?(.$format)?"{
+            constraints {
+                // apply constraints here
+            }
+        }
+
+        "/"(view:"/index")
+        "500"(view:'/error')
+        
+#foreach( $entity in $entities) 
+//routes for ${entity.name}
+"/api/${entity.getVariableName()}/$id"(controller:"api"){
+    action = [GET:"get${entity.name}ById", PUT:"update${entity.name}", DELETE:"delete${entity.name}", POST:"add${entity.name}"]
+}
+"/api/${entity.getVariableName()}s"(controller:"api",action:"list${entity.name}")
+
+#foreach( $attribute in $entity.attributes)
+#if(${attribute.checkForAnnotation("searchable")})
+"/api/${entity.getVariableName()}s/${attribute.getVariableName()}/$criteria"(controller:"api",action:"search${entity.name}By${attribute.proper()}")
+#end
+#if(${attribute.isCollection()})
+"/api/${entity.getVariableName()}/$id/add${attribute.generic}To${entity.name}"(controller:"api",action:"add${attribute.generic}To${entity.name}")
+"/api/${entity.getVariableName()}/$id/remove${attribute.generic}From${entity.name}"(controller:"api",action:"remove${attribute.generic}From${entity.name}")
+#end
+#end
+
+#end
+	}
+}

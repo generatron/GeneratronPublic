@@ -1,0 +1,17 @@
+#set ($language="Groovy")
+#set ($description="Domain Class")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($filename="${outputDir}/${project.name}/grails-app/controllers/${packageDir}/${clazzname}Controller.groovy")
+
+package  ${packageName}
+
+#if(${extends} == "false" )
+class ${clazzname}Controller {
+#else
+class ${clazzname} extends ${superclazzname}Controller {
+#end
+
+static scaffold = ${clazzname}
+
+} 

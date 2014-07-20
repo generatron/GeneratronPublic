@@ -1,0 +1,42 @@
+#set ($language="Groovy")
+#set ($description="TestingServices")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($filename="${outputDir}/${project.name}/test/unit/${packageDir}/${service.name}ServiceSpec.groovy")
+
+#if(${packageName} != "")
+package  ${packageName}
+#end
+
+import grails.test.mixin.TestFor
+import spock.lang.Specification
+
+@TestFor(${service.name}Service)
+
+#if(${extends} == "false" )
+class ${service.name}ServiceSpec extends Specification {
+#else
+class ${service.name}ServiceSpec extends ${superclazzname}Spec {
+#end
+
+ def setup() {
+ }
+
+ def cleanup() {
+ }
+/*
+#foreach($method in $service.methods)
+//Testing path $method
+
+void "test ${method}"() {
+
+	when:
+        service.${method}()
+        
+    then:
+       println "Tested service.${method}()"
+}
+#end
+*/
+}
+

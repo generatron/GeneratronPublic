@@ -1,0 +1,47 @@
+#set ($language="html")
+#set ($description="Domain Class from DB")
+#set ($author="Evol Johnson")
+#set ($overwrite="false")
+#set ($excludeFor="GrailsDomain")
+#set ($filename="${outputDir}/${project.name}/grails-app/domain/${packageDir}/${entity.name}.groovy")
+package ${packageName}
+
+
+
+#if(${entity.hasCompositePrimaryKey()})import org.apache.commons.lang.builder.HashCodeBuilder #end
+
+class ${entity.name} #if(${entity.hasCompositePrimaryKey()}) implements Serializable #end {
+
+#foreach ($attribute in $entity.attributes)
+#if(${attribute.name} != 'id')
+#if(!${attribute.isCollection()})
+#if(${attribute.domain})
+${attribute.hasRelationship} ${attribute.name}  
+#else
+${attribute.type} ${attribute.name}
+#end
+#end
+#end
+#end
+
+static hasMany =  [#set($cont=0)#foreach ($r in $entity.relations)#if($r.toMany == "YES")#if($cont>0),${r.name}:${r.destinationEntity}#else${r.name}:${r.destinationEntity}#end#set($cont = $cont +1)#end#end]
+
+
+static constraints = {
+#foreach ($attribute in $entity.attributes)
+#if(${attribute.grailsConstraints()} != "" )
+${attribute.grailsConstraints()}
+#end
+#end
+}
+
+
+static mapping = {
+##${entity.grailsMappings()}
+##foreach ($attribute in $entity.attributes)
+##//${attribute.grailsMappings()}
+##end
+}
+
+
+}

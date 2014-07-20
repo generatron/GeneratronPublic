@@ -1,0 +1,51 @@
+#set ($language="Groovy")
+#set ($description="TestingControllers")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($filename="${outputDir}/${project.name}/test/unit/${packageDir}/${controller.name}ControllerSpec.groovy")
+
+package  ${packageName}
+import grails.test.mixin.TestFor
+import spock.lang.Specification
+
+@TestFor(${controller.name}Controller)
+
+#if(${extends} == "false" )
+class ${controller.name}ControllerSpec extends Specification {
+#else
+class ${controller.name}ControllerSpec extends ${superclazzname}Spec {
+#end
+
+ def setup() {
+ }
+
+ def cleanup() {
+ }
+
+/*
+#foreach($uri in $controller.uris)
+
+//Testing path $uri
+#set($parts=${uri.split("/")})
+#if(${parts.size()} >= 3)
+#set($controllerName=${uri.split("/")[1]})
+#set($actionName=${uri.split("/")[2]})
+#else
+#set($controllerName=${uri.split("/")[0]})
+#set($actionName=${uri.split("/")[1]})
+#end
+##C: ${controllerName} C: ${actionName} S:${parts.size()}
+#if(${parts.size()} > 3)
+void "test ${actionName}P"() {
+#else
+void "test ${actionName}"() {
+#end
+	when:
+        controller.${actionName}()
+        
+    then:
+      print tested ${actionName}()
+}
+#end
+*/
+}

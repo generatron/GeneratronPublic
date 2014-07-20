@@ -1,0 +1,112 @@
+#set ($language="JavaScript")
+#set ($description="Packaging Information")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="false")
+#set ($filep="${entity.getVariableName}.module.js")
+#set ($filename="${outputDir}/${project.name}/www/js/${filep}")
+#parse("common/utils.parse")
+#parse("common/classHeader.parse")
+/**
+* Module
+*/
+angular.module('${project.name}.${entity.getVariableName()}.controllers',['ionic'])
+
+#if(${entity.checkForAnnotation("ShowInMainMenu")} && ${entity.displayable} )
+.controller('${entity.name}sCtrl', function (${d}scope, ${entity.name}Service,${d}ionicModal#set($cont=0)#foreach($domain in $entity.getDomains())#if($cont >= 0),#end${domain.type}Service#set($cont = $cont+1)#end) {
+console.log("${entity.name}sCtrl");
+//Filtering function
+${d}scope.filter${entity.name} = function( query ) {
+	return function( item ) {
+	if(query == undefined){
+		return true;
+	}
+	var include = false;
+#foreach( $attribute in $entity.attributes)
+#if(${attribute.checkForAnnotation("searchable")})
+	if( item.${attribute.name}.toString().toLowerCase().indexOf(query.toLowerCase()) >= 0 ){ include = true;}
+#end
+#end
+	return include;
+	};
+};
+
+${d}scope.${entity.getVariableName()}LoadCombos = function(){
+ #foreach($domainsat in $entity.getDomains())
+ #set($domain=$model.findDomain(${domainsat.shortType()}))
+ //Gets data to fill combo for  ${domain.type} values;
+ ${domain.name}Service.findAll().success(function(${domain.getVariableName()}s) {$scope.${domain.getVariableName()}s = ${domain.getVariableName()}s});
+ #end
+}
+
+// Create and load the Modal
+${d}ionicModal.fromTemplateUrl('templates/new-${entity.getVariableName()}.html', function(modal) {
+${d}scope.${entity.getVariableName()}CreateModal = modal;
+},{
+scope: ${d}scope,
+animation: 'slide-in-up'
+});
+ 
+$scope.${d}scope.${entity.getVariableName()}LoadCombos();
+  
+  // Open our new ${entity.getVariableName()} modal
+  $scope.showCreate${entity.name}Modal = function() {
+    $scope.${entity.getVariableName()}CreateModal.show();
+  };
+
+  // Close the new ${entity.getVariableName()} modal
+  $scope.hideCreate${entity.name}Modal = function() {
+    $scope.${entity.getVariableName()}CreateModal.hide();
+  };
+  
+      
+// New ${entity.name}: gets values and saves via Webservice 
+${d}scope.create${entity.name} = function(${entity.getVariableName()}) {
+${d}scope.${entity.getVariableName()} = {};
+
+#set ($cont=0)
+#foreach( $attribute in $entity.attributes)
+##if(${attribute.checkForAnnotation("ShowInForm")})
+#if(${attribute.getDomain()})
+#set($domain=$model.findDomain(${attribute.shortType()}))
+if(typeof ${entity.getVariableName()}.${attribute.name} != 'undefined'){
+	${d}scope.${entity.getVariableName()}['${attribute.name}'] = ${entity.getVariableName()}.${attribute.name}.${domain.getKeyField().name};
+}else{
+	${d}scope.${entity.getVariableName()}['${attribute.name}'] = null;
+}
+#else
+#if(${attribute.isCollection()})
+${d}scope.${entity.getVariableName()}['${attribute.name}'] = ${entity.getVariableName()}.${attribute.name};
+#else
+${d}scope.${entity.getVariableName()}['${attribute.name}'] = ${entity.getVariableName()}.${attribute.name};
+#end
+#end
+#set ($cont= $cont +1)
+##end
+#end
+
+${d}scope.hideCreate${entity.name}Modal();
+//sends request
+${entity.name}Service.save(${d}scope.${entity.getVariableName()}).success(function(data, status, headers, config) {
+//resets values
+#foreach( $attribute in $entity.attributes)
+#if(${attribute.checkForAnnotation("ShowInForm")})
+${entity.getVariableName()}.${attribute.name} = "";
+#end
+#end
+//refresh list
+${entity.name}Service.findAll().success(function(${entity.getVariableName()}s) {${d}scope.${entity.getVariableName()}s = ${entity.getVariableName()}s});
+}).error(function(data, status, headers, config) {
+	//${d}scope.status = status;
+	alert(data);
+});
+};
+ 
+${entity.name}Service.findAll().success(function(${entity.getVariableName()}s) {${d}scope.${entity.getVariableName()}s = ${entity.getVariableName()}s});
+
+})
+#end;
+
+
+	
+
