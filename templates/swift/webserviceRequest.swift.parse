@@ -1,0 +1,158 @@
+#if(${entity.checkForAnnotation("Generate")})
+
+func add${entity.name} (params:Dictionary){
+
+var request = NSMutableURLRequest(URL: NSURL(string: baseUrl+"add${entity.name}"))
+var session = NSURLSession.sharedSession()
+request.HTTPMethod = "POST"
+
+
+var err: NSError?
+request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
+request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+  println("Response: \(response)")
+  var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
+  println("Body: \(strData)")
+  var err: NSError?
+  var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as NSDictionary
+
+  if(err) {
+    println(err!.localizedDescription)
+  }
+  else {
+    var success = json["success"] as? Int
+  println("Succes: \(success)")
+  }
+})
+
+task.resume();
+
+}
+
+
+func update${entity.name} (params:Dictionary){
+
+var request = NSMutableURLRequest(URL: NSURL(string: baseUrl+"update${entity.name}"))
+var session = NSURLSession.sharedSession()
+request.HTTPMethod = "POST"
+
+
+var err: NSError?
+request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
+request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+  println("Response: \(response)")
+  var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
+  println("Body: \(strData)")
+  var err: NSError?
+  var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as NSDictionary
+
+  if(err) {
+    println(err!.localizedDescription)
+  }
+  else {
+    var success = json["success"] as? Int
+  println("Succes: \(success)")
+  }
+})
+
+task.resume();
+
+}
+
+
+
+func delete${entity.name} (params:Dictionary){
+
+var request = NSMutableURLRequest(URL: NSURL(string: baseUrl+"delete${entity.name}"))
+var session = NSURLSession.sharedSession()
+request.HTTPMethod = "POST"
+
+
+var err: NSError?
+request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
+request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+  println("Response: \(response)")
+  var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
+  println("Body: \(strData)")
+  var err: NSError?
+  var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as NSDictionary
+
+  if(err) {
+    println(err!.localizedDescription)
+  }
+  else {
+    var success = json["success"] as? Int
+  println("Succes: \(success)")
+  }
+})
+
+task.resume();
+
+}
+
+
+func get${entity.name} (params:Dictionary){
+
+var request = NSMutableURLRequest(URL: NSURL(string: baseUrl+"GET${entity.name}"))
+var session = NSURLSession.sharedSession()
+request.HTTPMethod = "GET"
+
+
+var err: NSError?
+request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
+request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+  println("Response: \(response)")
+  var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
+  println("Body: \(strData)")
+  var err: NSError?
+  var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as NSDictionary
+
+  if(err) {
+    println(err!.localizedDescription)
+  }
+  else {
+    var success = json["success"] as? Int
+  println("Succes: \(success)")
+  }
+})
+
+task.resume();
+
+}
+
+
+
+func list${entity.name}(){
+// 
+}
+
+#foreach( $attribute in $entity.attributes)
+#if(${attribute.searchable()})
+def search${entity.name}By${attribute.proper()}() 
+#end
+
+#if(${attribute.isCollection()})
+func add${attribute.generic}To${entity.name}(id:Long) {
+
+}
+func remove${attribute.generic}From${entity.name}(id:Long){
+}
+#end
+#end
+
+
+
+
+ 
