@@ -1,9 +1,0 @@
-#set ($language="Groovy")
-#set ($description="Performs duties related to user registration and authentication")
-#set ($author="Evol Johnson")
-#set ($overwrite="false")
-#set ($filename="${outputDir}/${project.name}/.gitignore")
-#parse('common/utils.parse')
-target/*
-target-eclipse/*
-.DS_Store
