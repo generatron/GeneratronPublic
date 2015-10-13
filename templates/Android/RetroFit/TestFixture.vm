@@ -16,21 +16,21 @@ ${project.name}Api api = restAdapter.create(${project.name}Api.class);
 
 //routes for ${entity.name}
 
-public void testGet{$entity.name}s(){
+public void testGet${entity.name}s(){
 }
 
-public void testCreate{$entity.name}(){
+public void testCreate${entity.name}(){
 }
 
-public void testRetrieve{$entity.name}(){
-}
-
-
-public void  testUpdate{$entity.name}(){
+public void testRetrieve${entity.name}(){
 }
 
 
-public void testDelete{$entity.name}(){
+public void  testUpdate${entity.name}(){
+}
+
+
+public void testDelete${entity.name}(){
 }
 
 //Per attribute
