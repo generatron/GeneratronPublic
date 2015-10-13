@@ -10,23 +10,23 @@ package  ${packageName}
 public interface ${project.name}Api {
 //From https://guides.codepath.com/android/Consuming-APIs-with-Retrofit
 //http://themakeinfo.com/2015/04/retrofit-android-tutorial/
----<< peop
+
 #foreach( $entity in $entities) 
 //routes for ${entity.name}
 @GET("/${entity.getVariableName()}/") 
-public Call<List<{${entity.name}>> get{${entity.name}s();
+public Call<List<${entity.name}>> get${entity.name}s();
 
 @POST("/${entity.getVariableName()}/") 
-public Call<List<{${entity.name}>> create{${entity.name}(@Body ${entity.name} ${entity.getVariableName()});
+public Call<List<${entity.name}>> create${entity.name}(@Body ${entity.name} ${entity.getVariableName()});
 
 @GET("/${entity.getVariableName()}/{id}")
-public Call<{${entity.name}> retrieve{${entity.name}(@Path("id") String id);
+public Call<${entity.name}> retrieve${entity.name}(@Path("id") String id);
 
 @POST("/${entity.getVariableName()}/{id}")
-public Call<{${entity.name}> update{${entity.name}(@Path("id") String id, @Body ${entity.name} ${entity.getVariableName()});
+public Call<${entity.name}> update${entity.name}(@Path("id") String id, @Body ${entity.name} ${entity.getVariableName()});
 
 @DELETE("/${entity.getVariableName()}/{id}")
-public Call<{${entity.name}> delete{${entity.name}(@Path("id") String id);
+public Call<${entity.name}> delete${entity.name}(@Path("id") String id);
 
 
 ###foreach( $attribute in $entity.attributes)
