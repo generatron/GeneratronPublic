@@ -46,5 +46,5 @@ public Call<{$entity.name}> delete{$entity.name}(@Path("id") String id);
  "${uri.path}"(controller:"${controller.name}",action:"${uri.action}")
  #end
 #end
+#end
 }
-	
