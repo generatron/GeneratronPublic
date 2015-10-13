@@ -1,0 +1,10 @@
+#set ( $d = "$")
+#set( $h = "#" )
+
+${cdels}
+[TRIVIA]
+It would take a person typing  @ ${estimatedSpeed} cpm, 
+approximately ${minutesEstimated} minutes to type the ${characterCount}+ characters in this file.
+${cdele}
+
+
