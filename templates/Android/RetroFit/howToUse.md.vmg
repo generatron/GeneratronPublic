@@ -1,0 +1,17 @@
+#set ($language="Java")
+#set ($description="EXAMPLE ON HOW TO USE THE API")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="HowToUserRetrofitClient.md")
+#set ($filename="${outputDir}/${bundle.name}/${filep}")
+#parse("common/utils.parse")
+
+\#\# HOW TO USE
+String API = "https://api.github.com";
+RestAdapter restAdapter = new RestAdapter.Builder().setLogLevel(RestAdapter.LogLevel.FULL)setEndpoint(API).build(); 
+${project.name}Api api = restAdapter.create(${project.name}Api.class);
+
+
+ 
+ 

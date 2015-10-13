@@ -1,0 +1,50 @@
+#set ($language="Java")
+#set ($description="Creates a Retrofit based Interface")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="${project.name}Api.java")
+#set ($filename="${outputDir}/${bundle.name}/${packageDir}/${filep}")
+#parse("common/utils.parse")
+
+package  ${packageName}
+public interface ${project.name}Api {
+//From https://guides.codepath.com/android/Consuming-APIs-with-Retrofit
+//http://themakeinfo.com/2015/04/retrofit-android-tutorial/
+
+#foreach( $entity in $entities) 
+//routes for ${entity.name}
+@GET("/${entity.getVariableName()}/") 
+public Call<List<{$entity.name}>> get{$entity.name}s();
+
+@POST("/${entity.getVariableName()}/") 
+public Call<List<{$entity.name}>> create{$entity.name}(@Body ${entity.name} ${entity.getVariableName()});
+
+@GET("/${entity.getVariableName()}/{id}")
+public Call<{$entity.name}> retrieve{$entity.name}(@Path("id") String id);
+
+@POST("/${entity.getVariableName()}/{id}")
+public Call<{$entity.name}> update{$entity.name}(@Path("id") String id, @Body ${entity.name} ${entity.getVariableName()});
+
+@DELETE("/${entity.getVariableName()}/{id}")
+public Call<{$entity.name}> delete{$entity.name}(@Path("id") String id);
+
+
+###foreach( $attribute in $entity.attributes)
+###if(${attribute.checkForAnnotation("searchable")})
+##"/${entity.getVariableName()}/${attribute.getVariableName()}/$criteria"(controller:"${entity.name}Api",action:"search${entity.name}By${attribute.proper()}")
+###end
+###if(${attribute.isCollection()})
+##"/${entity.getVariableName()}/$id/add${attribute.generic}To${entity.name}"(controller:"${entity.name}Api",action:"add${attribute.generic}To${entity.name}")
+##"/${entity.getVariableName()}/$id/remove${attribute.generic}From${entity.name}"(controller:"${entity.name}Api",action:"remove${attribute.generic}From${entity.name}")
+###end
+###end
+###end
+
+#foreach( $controller in $controllers)
+ #foreach( $uri in $controller.uris)
+ "${uri.path}"(controller:"${controller.name}",action:"${uri.action}")
+ #end
+#end
+}
+	

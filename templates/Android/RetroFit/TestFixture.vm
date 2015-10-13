@@ -1,0 +1,49 @@
+#set ($language="Java")
+#set ($description="Creates a Retrofit based Interface")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="${entity.name}ApiTest.java")
+#set ($filename="${outputDir}/${bundle.name}/test/${packageDir}/${filep}")
+#parse("common/utils.parse")
+
+package  ${packageName}
+public class ${entity.name}ApiTest {
+
+String API = "<put api base url here>";
+RestAdapter restAdapter = new RestAdapter.Builder().setLogLevel(RestAdapter.LogLevel.FULL)setEndpoint(API).build(); 
+${project.name}Api api = restAdapter.create(${project.name}Api.class);
+
+//routes for ${entity.name}
+
+public void testGet{$entity.name}s(){
+}
+
+public void testCreate{$entity.name}(){
+}
+
+public void testRetrieve{$entity.name}(){
+}
+
+
+public void  testUpdate{$entity.name}(){
+}
+
+
+public void testDelete{$entity.name}(){
+}
+
+//Per attribute
+###foreach( $attribute in $entity.attributes)
+###if(${attribute.checkForAnnotation("searchable")})
+##"/api/${entity.getVariableName()}/${attribute.getVariableName()}/$criteria"(controller:"${entity.name}Api",action:"search${entity.name}By${attribute.proper()}")
+###end
+###if(${attribute.isCollection()})
+##"/api/${entity.getVariableName()}/$id/add${attribute.generic}To${entity.name}"(controller:"${entity.name}Api",action:"add${attribute.generic}To${entity.name}")
+##"/api/${entity.getVariableName()}/$id/remove${attribute.generic}From${entity.name}"(controller:"${entity.name}Api",action:"remove${attribute.generic}From${entity.name}")
+###end
+###end
+###end
+
+}
+	
