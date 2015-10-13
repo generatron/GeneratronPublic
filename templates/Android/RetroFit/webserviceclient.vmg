@@ -6,12 +6,11 @@
 #set ($filep="${project.name}Api.java")
 #set ($filename="${outputDir}/${bundle.name}/${packageDir}/${filep}")
 #parse("common/utils.parse")
-
 package  ${packageName}
 public interface ${project.name}Api {
 //From https://guides.codepath.com/android/Consuming-APIs-with-Retrofit
 //http://themakeinfo.com/2015/04/retrofit-android-tutorial/
-
+---<< peop
 #foreach( $entity in $entities) 
 //routes for ${entity.name}
 @GET("/${entity.getVariableName()}/") 
