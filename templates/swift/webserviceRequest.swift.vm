@@ -1,11 +1,14 @@
 #set ($language="Swift")
-#set ($description="A class to create webservice requests for ${entity.name s}")
+#set ($description="Web service")
 #set ($author="Evol Johnson")
 #set ($overwrite="true")
-#set ($filename="${outputDir}/${project.name}/${entity.name}Client.swift")
+#set ($enabled="true")
+#set ($filep="${entity.name}Client.java")
+#set ($filename="${outputDir}/${bundle.name}/${filep}")
+#parse("common/utils.parse")
 
 // could extend from base Class
-class ${project.name}/${entity.name}Client  { 
+class ${entity.name}Client  { 
 let baseUrl = "http://localhost:9000/${project.name}/api/"
 #parse('swift/webserviceRequest.swift.parse')
 }
