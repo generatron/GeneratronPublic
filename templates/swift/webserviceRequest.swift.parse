@@ -151,8 +151,5 @@ func remove${attribute.generic}From${entity.name}(id:Long){
 }
 #end
 #end
-
-
-
-
+#end
  
