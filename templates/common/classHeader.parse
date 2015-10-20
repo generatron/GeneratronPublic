@@ -22,6 +22,7 @@ The above copyright notice and this permission notice shall be included in all c
 Engineered using http://www.generatron.com/
 
 [GENERATRON]
+Generator :   ${generatorName}
 Filename:     ${filep}
 Description:  ${description}
 Project:      ${project.name}

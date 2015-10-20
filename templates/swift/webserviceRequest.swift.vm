@@ -3,7 +3,7 @@
 #set ($author="Evol Johnson")
 #set ($overwrite="true")
 #set ($enabled="true")
-#set ($filep="${entity.name}Client.java")
+#set ($filep="${entity.name}Client.swift")
 #set ($filename="${outputDir}/${bundle.name}/${filep}")
 #parse("common/utils.parse")
 
