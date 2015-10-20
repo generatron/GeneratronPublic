@@ -4,7 +4,9 @@ This is a Demo repository for www.generatron.com
 Generatron will read the model contained in spec.yaml and will use that to generate code
 that is the only thing you will need to get started.
 
-Let's do a quick demo using our http://generatronpublic.slack.com/ community. Need an invite get one at http://slack.generatron.com/
+Let's do a quick demo using our http://generatronpublic.slack.com/ community. The process is similar on our website.
+
+Need an invite? get one at http://slack.generatron.com/
 
 # Getting started, or better yet, Gettin' it Dunn! #
 
@@ -48,3 +50,5 @@ You can change models my using:
     Use [ModelName]
 
 Create your own spec.yaml in another repo, and do "explore", remember your repo needs to be readable by public.
+
+You can also create your own templates, to customize the output, that will be another tutorial, coming up soon. 
