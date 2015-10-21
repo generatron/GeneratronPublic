@@ -9,7 +9,7 @@
 var express = require('express'),
     bodyParser = require('body-parser'),
     compression = require('compression'),
-    #foreach($entity : $entities)
+    #foreach($entity in $entities)
     ${entity.getVariableName()}s = require('./server/${entity.getVariableName()}s'),
     #end
     sqlinit = require('./server/sqlinit'),
@@ -22,7 +22,7 @@ app.use(compression());
 
 app.use('/', express.static(__dirname + '/www'));
 
-#foreach($entity : $entities)
+#foreach($entity in $entities)
 app.get('/${entity.getVariableName()}s', ${entity.getVariableName()}s.findAll);
 app.get('/${entity.getVariableName()}s/:id', ${entity.getVariableName()}s.findById);
 app.post('/${entity.getVariableName()}s', ${entity.getVariableName()}s.createItem);
