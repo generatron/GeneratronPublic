@@ -1,0 +1,46 @@
+#set ($language="Javascript")
+#set ($description="Creates the app entry point\n based on code from Christophe Coenraets")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="server.js")
+#set ($filename="${outputDir}/${filep}")
+#parse("common/utils.parse")
+var express = require('express'),
+    bodyParser = require('body-parser'),
+    compression = require('compression'),
+    #foreach($entity : $entities)
+    ${entity.getVariableName()}s = require('./server/${entity.getVariableName()}s'),
+    #end
+    sqlinit = require('./server/sqlinit'),
+    app = express();
+
+app.set('port', process.env.PORT || 5000);
+
+app.use(bodyParser.json());
+app.use(compression());
+
+app.use('/', express.static(__dirname + '/www'));
+
+#foreach($entity : $entities)
+app.get('/${entity.getVariableName()}s', ${entity.getVariableName()}s.findAll);
+app.get('/${entity.getVariableName()}s/:id', ${entity.getVariableName()}s.findById);
+app.post('/${entity.getVariableName()}s', ${entity.getVariableName()}s.createItem);
+app.put('/${entity.getVariableName()}s', ${entity.getVariableName()}s.updateItem);
+app.delete('/${entity.getVariableName()}s/:id', ${entity.getVariableName()}s.deleteItem);
+#foreach($attribute in $entity.attributes)
+#if($attribute.isCollection())
+app.get('/${entity.getVariableName()}s/:id/${attribute.name}', ${attribute.name}.findBy${entity.name});
+#end
+#end
+#end
+
+
+app.use(function(err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send(err);
+});
+
+app.listen(app.get('port'), function () {
+    console.log('Express server listening on port ' + app.get('port'));
+});
