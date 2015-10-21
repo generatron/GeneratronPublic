@@ -4,9 +4,10 @@ This is a Demo repository for www.generatron.com
 Generatron will read the model contained in spec.yaml and will use that to generate code
 that is the only thing you will need to get started.
 
-Let's do a quick demo using our http://generatronpublic.slack.com/ community. The process is similar on our website.
+If you haven't please join or slack community by requesting an invite at http://slack.generatron.com/. 
 
-Need an invite? get one at http://slack.generatron.com/
+Then go to  http://generatronpublic.slack.com/ 
+
 
 # Getting started, or better yet, Gettin' it Dunn! #
 
