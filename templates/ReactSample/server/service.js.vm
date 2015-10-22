@@ -17,7 +17,9 @@ let findAll = (req, res, next) => {
         SELECT #foreach($attribute in $entity.attributes)#if($cont>0) ,#end c.${attribute.name} #set($cont=$cont+1)#end
         FROM ${entity.getVariableName()} as c
         #foreach($attribute in $entity.attributes)
+        #if ($field.domain == true )
         INNER JOIN ${attribute.name} as t ON c.${attribute.name}_id=${attribute.name}.id
+        #end
         #end
         ;
     db.query(sql, [])
@@ -48,7 +50,9 @@ let findById = (req, res, next) => {
         SELECT #foreach($attribute in $entity.attributes) #if($cont>0) ,#end c.${attribute.name} #set($cont=$cont+1) #end
         FROM ${entity.getVariableName()} as c
         #foreach($attribute in $entity.attributes)
+        #if ($field.domain == true )
         INNER JOIN ${attribute.name} as t ON c.${attribute.name}_id=${attribute.name}.id
+        #end
         #end
         ;
         WHERE c.id = $1`;
