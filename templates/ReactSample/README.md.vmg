@@ -5,16 +5,16 @@
 #set ($enabled="true")
 #set ($header="false")
 
-#set ($filep="README.md")
+#set ($filep="GENERATED_README.md")
 #set ($filename="${outputDir}/${filep}")
 #parse("common/utils.parse")
 
 ${h} ${project.name}
 
-NOTE: this are the instructions copies from the original 
-${project.name} is a sample project demonstrating how to build applications with React, Node.js, and the Lightning Design System. ${project.name} is written using ECMAScript 6 on the client and on the server (leveraging the new ES6 support of Node.js 4).
+NOTE: these are the instructions copied from the original just as a sample and adding some code generation to show data entities
 
-Check out this video for a quick walkthrough:
+ 
+${project.name} is a sample project demonstrating how to build applications with React, Node.js, and the Lightning Design System. ${project.name} is written using ECMAScript 6 on the client and on the server (leveraging the new ES6 support of Node.js 4).
 
 
 The back-end is built with **Node.js** using a **Postgres** database. 

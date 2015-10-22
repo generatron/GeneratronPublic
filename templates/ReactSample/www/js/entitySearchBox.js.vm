@@ -20,7 +20,7 @@ export default React.createClass({
 
     keyChangeHandler(criteria) {
         if (criteria) {
-            ${entity.name}Service.findBy${su.proper($entity.getComboFieldName())}(${entity.getComboFieldName()}).then(${entity.getVariableName()}s => this.setState({${entity.getVariableName()}s}));
+            ${entity.name}Service.findBy${su.proper($entity.getComboFieldName())}(criteria).then(${entity.getVariableName()}s => this.setState({${entity.getVariableName()}s}));
         }
     },
 
