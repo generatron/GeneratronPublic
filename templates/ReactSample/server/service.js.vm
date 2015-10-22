@@ -4,7 +4,7 @@
 #set ($overwrite="true")
 #set ($enabled="true")
 #set ($filep="${entity.name}s.js")
-#set ($filename="${outputDir}/www/js/services'${filep}")
+#set ($filename="${outputDir}/server/services/${filep}")
 #parse("common/utils.parse")
 "use strict";
 
