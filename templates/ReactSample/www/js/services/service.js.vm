@@ -1,0 +1,27 @@
+#set ($language="Javascript")
+#set ($description="The Window")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="${entity.name}s.js")
+#set ($filename="${outputDir}/www/js/services'${filep}")
+#parse("common/utils.parse")
+import * as rest from './rest';
+
+let url = "/${entity.getVariableName()}s";
+
+export let findAll = queryParams => rest.get(url, queryParams);
+
+export let findById = id => rest.get(url + "/" + id);
+
+#foreach($field in $entity.attributes)
+#if ($field.domain == true )
+export let findByStudent = (${field.name}Id, queryParams) => rest.get("/${field.name}s/" + ${field.name}Id + url, queryParams);
+#end
+#end
+
+export let createItem = ${entity.getVariableName()} => rest.post(url, ${entity.getVariableName()});
+
+export let updateItem = ${entity.getVariableName()} => rest.put(url, ${entity.getVariableName()});
+
+export let deleteItem = id => rest.del(url + "/" + id);

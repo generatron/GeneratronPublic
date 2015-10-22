@@ -1,0 +1,107 @@
+#set ($language="Javascript")
+#set ($description="Captures information for an entity")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="${entity.name}Form.js")
+#set ($filename="${outputDir}/www/js/${filep}")
+#parse("common/utils.parse")
+import React from 'react/addons';
+
+import * as ${entity.name}Service from './services/${entity.name}Service';
+#foreach($field in $entity.attributes)
+#if ($field.domain == true )
+import * as ${field.type}Service from './services/${field.type}Service';
+#end
+#end
+
+import ComboBox from './components/ComboBox';
+
+export default React.createClass({
+
+    getInitialState() {
+    	return {${entity.getVariableName()}:{}, #foreach($field in $entity.attributes)#if($field.domain == true),${field.name}s:[]#end#end};     		
+    },
+
+    componentWillReceiveProps(props) {
+        let ${entity.getVariableName()} = props.${entity.getVariableName()};
+        this.setState({${entity.getVariableName()}});
+    },
+
+    componentDidMount() {
+#foreach($field in $entity.attributes)
+#if ($field.domain == true )
+	${field.generic}Service.findAll().then(${field.name} => this.setState({${field.name}s}));
+#end
+#end
+    },
+    
+#set($cont=0)    
+#foreach($field in $entity.attributes)
+	#if($cont > 1),#end
+	#if(!${field.isCollection()} && !${field.domain})
+    ${field.name}ChangeHandler(event) {
+        let ${entity.getVariableName()} = this.state.${entity.getVariableName()};
+        ${entity.getVariableName()}.${field.name} = event.target.value;
+        this.setState({${entity.getVariableName()}});
+    }
+    #else
+    #if(${field.isCollection()})
+    ${field.name}ChangeHandler(index, value, label) {
+    	// Should add to collection
+        /*let ${entity.getVariableName()} = this.state.${entity.getVariableName()};
+        ${entity.getVariableName()}.${field.name}.id = value;
+        this.setState({${entity.getVariableName()}});*/
+    }
+    #end
+    #if(${field.domain})
+    ${field.name}ChangeHandler(index, value, label) {
+        let ${entity.getVariableName()} = this.state.${entity.getVariableName()};
+        ${entity.getVariableName()}.${field.name}.id = value;
+        this.setState({${entity.getVariableName()}});
+    }
+    #end
+   #end
+   #set($cont = $cont+1)
+#end
+
+    save() {
+        let saveItem = this.state.${entity.getVariableName()}.id ? ${entity.name}Service.updateItem : ${entity.name}Service.createItem;
+        saveItem(this.state.${entity.getVariableName()}).then(saved${entity.name} => {
+            if (this.props.onSaved) this.props.onSaved(saved${entity.name});
+        });
+    },
+
+    render() {
+        let ${entity.getVariableName()} = this.state.${entity.getVariableName()};
+        return (
+            <div className="slds-form--stacked slds-grid slds-wrap">
+                <div className="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2">
+                	#foreach($field in $entity.attributes)
+                	#if(!${field.isCollection()} && !${field.domain})
+                    <div className="slds-form-element">
+                        <label className="slds-form-element__label" htmlFor="sample1">${field.label}</label>
+                        <div className="slds-form-element__control">
+                            <input className="slds-input" type="text" value={${entity.getVariableName()}.${field.name}} onChange={this.${field.name}ChangeHandler}/>
+                        </div>
+                    </div>
+                    #else
+                    #if(${field.isCollection()})
+                    
+                    #end
+                    #if(${field.domain})
+                    <div className="slds-form-element">
+                        <label className="slds-form-element__label" htmlFor="sample1">${field.label}</label>
+                        <div className="slds-form-element__control">
+                            <ComboBox data={this.state.${field.name}s} value={${entity.getVariableName()}.${field.name}} onChange={this.${field.name}ChangeHandler}/>
+                        </div>
+                    </div>
+                    #end
+                    #end
+                    #end
+                </div>
+            </div>
+        );
+    }
+
+});

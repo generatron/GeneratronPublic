@@ -3,19 +3,19 @@
 #set ($author="Evol Johnson")
 #set ($overwrite="true")
 #set ($enabled="true")
-#set ($header="true")
+#set ($header="false")
+
 #set ($filep="README.md")
 #set ($filename="${outputDir}/${filep}")
 #parse("common/utils.parse")
 
 ${h} ${project.name}
 
-
+NOTE: this are the instructions copies from the original 
 ${project.name} is a sample project demonstrating how to build applications with React, Node.js, and the Lightning Design System. ${project.name} is written using ECMAScript 6 on the client and on the server (leveraging the new ES6 support of Node.js 4).
 
 Check out this video for a quick walkthrough:
 
-[![Video](http://img.youtube.com/vi/32Agr6QWmqU/0.jpg)](http://www.youtube.com/watch?v=32Agr6QWmqU)
 
 The back-end is built with **Node.js** using a **Postgres** database. 
 
@@ -71,8 +71,8 @@ ${h} Just for Fun
 ${h}${h} Entity information
 #foreach(${entity} in $entities)
 
-*** ${entity.name}
+ ${h}${h}${h} ${entity.name}
 #foreach(${attribute} in $entity.attributes)
-**** ${attribute.name}
+    ${attribute.name}
 #end
 #end

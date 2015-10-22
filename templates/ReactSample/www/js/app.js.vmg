@@ -1,0 +1,33 @@
+#set ($language="Javascript")
+#set ($description="app")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="app.js")
+#set ($filename="${outputDir}/www/js/${filep}")
+#parse("common/utils.parse")
+import React from 'react';
+import {Router, Route, IndexRoute} from 'react-router';
+
+#foreach($entity in $entities)
+import ${entity.name}Home from './${entity.name}Home';
+import ${entity.name}Record from './${entity.name}Record';
+import ${entity.name}View from './${entity.name}View';
+import ${entity.name}FormWrapper from './${entity.name}FormWrapper';
+#end
+
+React.render((
+    <Router>
+        <Route path="/" component={Shell}>
+            <IndexRoute component={StudentHome}/>
+ 			#foreach($entity in $entities)
+            <Route path="${entity.getVariableName()}s" component={${entity.name}Home}/>
+            <Route path="${entity.getVariableName()}" component={${entity.name}Record}>
+                <Route path=":${entity.getVariableName()}Id" component={${entity.name}View}/>
+                <Route path=":${entity.getVariableName()}Id/edit" component={${entity.name}FormWrapper}/>
+            </Route>
+            #end
+            <Route path="*" component={StudentHome}/>
+        </Route>
+    </Router>
+), document.body);

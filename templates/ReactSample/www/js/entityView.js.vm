@@ -1,0 +1,41 @@
+#set ($language="Javascript")
+#set ($description="Home")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="${entity.name}View.js")
+#set ($filename="${outputDir}/www/js/${filep}")
+#parse("common/utils.parse")
+import React from 'react';
+
+import ${entity.name}EnrollmentCard from "./${entity.name}EnrollmentCard";
+
+export default React.createClass({
+
+    render() {
+        let ${entity.getVariableName()} = this.props.${entity.getVariableName()};
+        return (
+        <div className="slds-m-around--medium">
+            <div className="slds-grid slds-wrap slds-m-bottom--large">
+                <div className="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-m-top--medium">
+#foreach($field in $entity.attributes)
+#if ($field.domain == true )
+	<dl className="page-header--rec-home__detail-item">
+                        <dt>
+                            <p className="slds-text-heading--label slds-truncate" title="Field 1">${field.label}</p>
+                        </dt>
+                        <dd>
+                            <p className="slds-text-body--regular slds-truncate" title="">{${entity.getVariableName()}.name}</p>
+                        </dd>
+                    </dl>
+#end
+#end
+
+                    
+                </div>
+            </div>
+            <${entity.name}EnrollmentCard ${entity.getVariableName()}={${entity.getVariableName()}}/>
+        </div>
+        );
+    }
+});

@@ -1,0 +1,32 @@
+#set ($language="Javascript")
+#set ($description="Home")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="${entity.name}Wrapper.js")
+#set ($filename="${outputDir}/www/js/${filep}")
+#parse("common/utils.parse")
+import React from 'react/addons';
+
+import ${entity.name}Form from './${entity.name}Form';
+
+export default React.createClass({
+
+    saveHandler() {
+        this.refs.form.save();
+    },
+
+    savedHandler() {
+        window.location.hash = "#${entity.getVariableName()}/" + this.props.${entity.getVariableName()}.id;
+    },
+
+    render() {
+        return (
+            <div className="slds-m-around--medium">
+                <${entity.name}Form ref="form" ${entity.getVariableName()}={this.props.${entity.getVariableName()}} onSaved={this.savedHandler}/>
+                <button className="slds-button slds-button--neutral slds-button--brand slds-m-around--small" onClick={this.saveHandler}>Save</button>
+            </div>
+        );
+    }
+
+});

@@ -1,0 +1,72 @@
+#set ($language="Javascript")
+#set ($description="Home")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="${entity.name}Record.js")
+#set ($filename="${outputDir}/www/js/${filep}")
+#parse("common/utils.parse")
+import React from 'react';
+import moment from 'moment';
+
+import * as ${entity.name}Service from './services/${entity.name}Service';
+
+import {RecordHeader, HeaderField} from './components/PageHeader';
+
+import ${entity.name}View from './${entity.name}View';
+import ${entity.name}EnrollmentCard from './${entity.name}EnrollmentCard';
+
+export default React.createClass({
+
+    getInitialState() {
+        return {${entity.getVariableName()}:{}};
+    },
+
+    componentDidMount() {
+        this.get${entity.name}(this.props.params.${entity.getVariableName()}Id);
+    },
+
+    componentWillReceiveProps(props) {
+        this.get${entity.name}(props.params.${entity.getVariableName()}Id);
+    },
+
+    get${entity.name}(id) {
+        ${entity.name}Service.findById(id).then(${entity.getVariableName()} => this.setState({${entity.getVariableName()}}));
+    },
+
+    deleteHandler() {
+        ${entity.name}Service.deleteItem(this.state.${entity.getVariableName()}.id).then(() => window.location.hash = "${entity.getVariableName()}s");
+    },
+
+    editHandler() {
+        window.location.hash = "#${entity.getVariableName()}/" + this.state.${entity.getVariableName()}.id + "/edit";
+    },
+
+    render() {
+        return (
+            <div>
+                <RecordHeader type="${entity.name}"
+                              icon="orders"
+                              title={this.state.${entity.getVariableName()}.name}
+                              onEdit={this.editHandler}
+                              onDelete={this.deleteHandler}>
+#foreach($field in $entity.attributes)
+#if($field.getGenerationConfiguration().getShowInTable())
+#if (!$field.domain && !$field.isCollection() )
+			<HeaderField label="${field.label}" value={this.state.${entity.getVariableName()}.${field.name}}/>
+#else
+#if ($field.domain == true )
+    #set($domain=$application.find($field.type))
+			<HeaderField label="${field.label}" value={this.state.${entity.getVariableName()}.${domain.getComboFieldName()}/>
+#end
+#end
+#end
+#end                              
+                </RecordHeader>
+
+                {React.cloneElement(this.props.children, {${entity.getVariableName()}: this.state.${entity.getVariableName()}})}
+
+            </div>
+        );
+    }
+});

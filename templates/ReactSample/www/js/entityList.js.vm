@@ -1,0 +1,55 @@
+#set ($language="Javascript")
+#set ($description="Home")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="${entity.name}List.js")
+#set ($filename="${outputDir}/www/js/${filep}")
+#parse("common/utils.parse")
+import React from 'react';
+import DataGrid from './components/DataGrid';
+
+export default React.createClass({
+
+    ${entity.getVariableName()}LinkHandler(${entity.getVariableName()}) {
+        window.location.hash = "#${entity.getVariableName()}/" + ${entity.getVariableName()}.id;
+    },
+#foreach($field in $entity.attributes)
+#if ($field.domain == true )
+	${field.name}LinkHandler(${entity.getVariableName()}) {
+        window.location.hash = "#${field.name}/" + ${entity.getVariableName()}.${field.name};
+    },
+#end
+#end
+    
+
+    rowClick(data) {
+        if (this.props.onRowClick) {
+            this.props.onRowClick(data);
+        }
+    },
+
+    render() {
+        return (
+            <DataGrid data={this.props.${entity.getVariableName()}s} onRowClick={this.rowClick} ignoreLinks={this.props.ignoreLinks}>
+#foreach($field in $entity.attributes)
+#if($field.getGenerationConfiguration().getShowInTable())
+#if (!$field.domain && !$field.isCollection() )
+			<div header="${field.label}" field="${field.label}" onLink={this.${entity.getVariableName()}LinkHandler}/>
+#else
+#if ($field.domain == true )
+    #set($domain=$application.find($field.type))
+			<div header="${field.label}" field="${domain.getComboFieldName()}"/>
+#end
+#if ($field.collection == true )
+    #set($domain=$application.find($field.type))
+			<div header="${field.label}" field="${domain.getComboFieldName()}"/>
+#end
+#end
+#end
+#end
+            </DataGrid>
+        );
+    }
+
+});

@@ -1,0 +1,33 @@
+#set ($language="Javascript")
+#set ($description="Home")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="Shell.js")
+#set ($filename="${outputDir}/www/js/${filep}")
+#parse("common/utils.parse")
+import React from 'react';
+
+import Spinner from './components/Spinner';
+import Toast from './components/Toast';
+import {Icon} from './components/Icons';
+
+export default React.createClass({
+
+    render() {
+        return (
+            <div>
+                <Spinner/>
+                <Toast/>
+                <header className="menu" style={{backgroundColor:"#01344E", verticalAlign:"middle"}}>
+                    <ul className="slds-list--horizontal">
+#foreach($entity in $entities)
+                        <li className="slds-list__item"><a href="#${entity.getVariableName()}s"><Icon name="orders" theme={null}/>${entity.name}s</a></li>
+#end
+                    </ul>
+                </header>
+                {this.props.children}
+            </div>
+        );
+    }
+});

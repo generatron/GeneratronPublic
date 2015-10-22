@@ -1,0 +1,86 @@
+#set ($language="Javascript")
+#set ($description="Home")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="${entity.name}Home.js")
+#set ($filename="${outputDir}/www/js/${filep}")
+#parse("common/utils.parse")
+import React from 'react';
+
+import * as ${entity.name}Service from './services/${entity.name}Service';
+#foreach($field in $entity.attributes)
+#if ($field.domain == true )
+import * as ${field.type}Service from './services/${field.type}Service';
+#end
+#end
+
+import settings from './services/settings';
+
+import {HomeHeader} from './components/PageHeader';
+
+import ${entity.name}List from './${entity.name}List';
+import ${entity.name}FormWindow from './${entity.name}FormWindow';
+
+
+export default React.createClass({
+
+    getInitialState() {
+        return {${entity.getVariableName()}s:[], #foreach($field in $entity.attributes)#if($field.domain == true),${field.name}s:[],${field.name}Id:settings.current${field.type}#end#end};
+    },
+
+    componentDidMount() {
+        PeriodService.findAll().then(periods => this.setState({periods}));
+        
+#foreach($field in $entity.attributes)
+#if ($field.domain == true )
+	${field.generic}Service.findAll().then(${field.name}s => this.setState({${field.name}s}));
+	${entity.name}Service.findAll({${field.name}Id: this.state.${field.name}Id}).then(${entity.getVariableName()}s => this.setState({${entity.getVariableName()}s}));
+#end
+#end
+    },
+
+    editHandler(data) {
+        window.location.hash = "#${entity.getVariableName()}/" + data.id + "/edit";
+    },
+
+    viewChangeHandler(index, periodId, label) {
+        ${entity.name}Service.findAll({periodId}).then(${entity.getVariableName()}s => this.setState({periodId, ${entity.getVariableName()}s}));
+    },
+
+    newHandler() {
+        this.setState({adding${entity.name}:true});
+    },
+
+    savedHandler(student) {
+        this.setState({adding${entity.name}: false});
+        window.location.hash = "#${entity.getVariableName()}/" + ${entity.getVariableName()}.id;
+    },
+
+    cancelHandler() {
+        this.setState({adding${entity.name}: false});
+    },
+
+    render() {
+        return (
+            <div>
+                <HomeHeader type="${entity.name}s"
+                            title="Current ${entity.name}s"
+                            newLabel="New ${entity.name}"
+                            actions={[{value:"new", label:"New ${entity.name}"}]}
+                            itemCount={this.state.${entity.getVariableName()}s.length}
+#foreach($field in $entity.attributes)
+#if ($field.domain == true )
+	                        view${field.name}Id={this.state.${field.name}Id} 
+                            views${field.name}={this.state.${field.name}s}
+#end
+#end
+                            onViewChange={this.viewChangeHandler}
+                            onNew={this.newHandler}/>
+                <${entity.name}List ${entity.getVariableName()}s={this.state.${entity.getVariableName()}s}/>
+                {this.state.adding${entity.name}?<${entity.name}FormWindow onSaved={this.savedHandler} onCancel={this.cancelHandler}/>:null}
+            </div>
+        );
+    }
+
+});

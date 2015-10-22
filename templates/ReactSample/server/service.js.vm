@@ -1,0 +1,94 @@
+#set ($language="Javascript")
+#set ($description="The Window")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="${entity.name}s.js")
+#set ($filename="${outputDir}/www/js/services'${filep}")
+#parse("common/utils.parse")
+"use strict";
+
+let db = require('./pghelper');
+
+let findAll = (req, res, next) => {
+    let periodId = req.query.periodId;
+    #set($cont=0)
+    let sql = `
+        SELECT #foreach($attribute in $entity.attributes)#if($cont>0) ,#end$c.{attribute.name}#set($cont=$cont+1)#end
+        FROM ${entity.getVariableName()} as c
+        #foreach($attribute in $entity.attributes)
+        INNER JOIN ${attribute.name} as t ON c.${attribute.name}_id=${attribute.name}.id
+        #end
+        ;
+    db.query(sql, [])
+        .then(result => res.json(result))
+        .catch(next);
+};
+
+#foreach($field in $entity.attributes)
+#if ($field.domain == true )
+#set($domain=$application.find($field.type))
+let findBy${field.type} = (req, res, next) => {
+    let ${field.name}Id = req.params.id;
+    let sql = `
+        SELECT #foreach($attribute in $domain.attributes)#if($cont>0) ,#end$c.{attribute.name}#set($cont=$cont+1)#end
+        FROM ${domain.getVariableName()} as c;
+    db.query(sql, [parseInt(teacherId)])
+        .then(${entity.getVariableName()}s =>  res.json(${entity.getVariableName()}s))
+        .catch(next);
+};
+#end
+#end
+
+
+
+let findById = (req, res, next) => {
+    let id = req.params.id;
+    let sql = `
+        SELECT #foreach($attribute in $entity.attributes)#if($cont>0) ,#end$c.{attribute.name}#set($cont=$cont+1)#end
+        FROM ${entity.getVariableName()} as c
+         #foreach($attribute in $entity.attributes)
+        INNER JOIN ${attribute.name} as t ON c.${attribute.name}_id=${attribute.name}.id
+        #end
+        ;
+        WHERE c.id = $1`;
+    db.query(sql, [parseInt(id)])
+        .then(${entity.getVariableName()}s =>  res.json(${entity.getVariableName()}s[0]))
+        .catch(next);
+};
+
+let createItem = (req, res, next) => {
+    let ${entity.getVariableName()} = req.body;
+    let sql = `INSERT INTO ${entity.getVariableName()} (#foreach($attribute in $entity.attributes)#if($cont>0) ,#end${attribute.name}#set($cont=$cont+1)#end)
+			   VALUES (#foreach($attribute in $entity.attributes)#if($cont>0) ,#end${d}${cont}#set($cont=$cont+1)#end)`;
+    db.query(sql, [#foreach($attribute in $entity.attributes)#if($cont>0) ,#end${entity.getVariableName()}.${attribute.name}#set($cont=$cont+1)#end])
+        .then(result => res.send({id: result.insertId}))
+        .catch(next);
+};
+
+let updateItem = (req, res, next) => {
+    let ${entity.getVariableName()} = req.body;
+    let sql = `UPDATE ${entity.getVariableName()} SET #foreach($attribute in $entity.attributes)#if($cont>0) ,#end${attribute.name}=${d}${cont}#set($cont=$cont+1)#end WHERE id=${d}${cont}`;
+    db.query(sql, [#foreach($attribute in $entity.attributes)#if($cont>0) ,#end${entity.getVariableName()}.${attribute.name}#set($cont=$cont+1)#end])
+        .then(() => res.send({result: 'ok'}))
+        .catch(next);
+};
+
+let deleteItem = (req, res, next) => {
+    let ${entity.getVariableName()}Id = req.params.id;
+    db.query('DELETE FROM ${entity.getVariableName()} WHERE id=$1', [${entity.getVariableName()}Id], true)
+        .then(() => res.send({result: 'ok'}))
+        .catch(next);
+};
+
+exports.findAll = findAll;
+#foreach($field in $entity.attributes)
+#if ($field.domain == true )
+#set($domain=$application.find($field.type))
+exports.findBy${field.type} = findBy${field.type};
+#end
+#end
+exports.findById = findById;
+exports.createItem = createItem;
+exports.updateItem = updateItem;
+exports.deleteItem = deleteItem;
