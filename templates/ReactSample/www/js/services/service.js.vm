@@ -16,7 +16,7 @@ export let findById = id => rest.get(url + "/" + id);
 
 #foreach($field in $entity.attributes)
 #if ($field.domain == true )
-export let findByStudent = (${field.name}Id, queryParams) => rest.get("/${field.name}s/" + ${field.name}Id + url, queryParams);
+export let findBy${field.proper()} = (${field.name}Id, queryParams) => rest.get("/${field.name}s/" + ${field.name}Id + url, queryParams);
 #end
 #end
 

@@ -32,6 +32,7 @@ let findAll = (req, res, next) => {
 #set($domain=$application.find($field.type))
 let findBy${field.type} = (req, res, next) => {
     let ${field.name}Id = req.params.id;
+    #set($cont=0)
     let sql = `
         SELECT #foreach($attribute in $domain.attributes)#if($cont>0) ,#end c.${attribute.name} #set($cont=$cont+1)#end
         FROM ${domain.getVariableName()} as c;
@@ -46,6 +47,7 @@ let findBy${field.type} = (req, res, next) => {
 
 let findById = (req, res, next) => {
     let id = req.params.id;
+    #set($cont=0)
     let sql = `
         SELECT #foreach($attribute in $entity.attributes) #if($cont>0) ,#end c.${attribute.name} #set($cont=$cont+1) #end
         FROM ${entity.getVariableName()} as c
@@ -63,7 +65,9 @@ let findById = (req, res, next) => {
 
 let createItem = (req, res, next) => {
     let ${entity.getVariableName()} = req.body;
+    #set($cont=0)
     let sql = `INSERT INTO ${entity.getVariableName()} (#foreach($attribute in $entity.attributes)#if($cont>0) ,#end ${attribute.name} #set($cont=$cont+1)#end)
+    #set($cont=0)
 			   VALUES (#foreach($attribute in $entity.attributes) #if($cont>0) ,#end ${d}${cont} #set($cont=$cont+1)#end)`;
     db.query(sql, [#foreach($attribute in $entity.attributes)#if($cont>0) ,#end ${entity.getVariableName()}.${attribute.name}#set($cont=$cont+1)#end])
         .then(result => res.send({id: result.insertId}))
@@ -72,7 +76,9 @@ let createItem = (req, res, next) => {
 
 let updateItem = (req, res, next) => {
     let ${entity.getVariableName()} = req.body;
+    #set($cont=0)
     let sql = `UPDATE ${entity.getVariableName()} SET #foreach($attribute in $entity.attributes)#if($cont>0) ,#end${attribute.name}=${d}${cont}#set($cont=$cont+1)#end WHERE id=${d}${cont}`;
+    #set($cont=0)
     db.query(sql, [#foreach($attribute in $entity.attributes)#if($cont>0) ,#end${entity.getVariableName()}.${attribute.name}#set($cont=$cont+1)#end])
         .then(() => res.send({result: 'ok'}))
         .catch(next);
