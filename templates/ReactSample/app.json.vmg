@@ -1,0 +1,15 @@
+#set ($language="Javascript")
+#set ($description="app.json File")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($header="false")
+#set ($filep="app.json")
+#set ($filename="${outputDir}/${filep}")
+#parse("common/utils.parse")
+{
+  "name": "${project.name}",
+  "description": "Reference app built with React and the Lightning Design System",
+  "repository": "https://ejohnsonw@bitbucket.org/ejohnsonw/reactuniversity.git",
+  "addons": ["heroku-postgresql:hobby-dev"]
+}

@@ -1,0 +1,12 @@
+#set ($language="Javascript")
+#set ($description="app.json File")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($header="true")
+#set ($filep=".gitignore")
+#set ($filename="${outputDir}/${filep}")
+#parse("common/utils.parse")
+npm-debug.log
+node_modules
+.idea/

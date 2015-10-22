@@ -4,7 +4,7 @@
 #set ($overwrite="true")
 #set ($enabled="true")
 #set ($header="false")
-#set ($filep="server.js")
+#set ($filep="package.json")
 #set ($filename="${outputDir}/${filep}")
 #parse("common/utils.parse")
 {
