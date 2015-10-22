@@ -14,7 +14,7 @@ let findAll = (req, res, next) => {
     let periodId = req.query.periodId;
     #set($cont=0)
     let sql = `
-        SELECT #foreach($attribute in $entity.attributes)#if($cont>0) ,#end$c.{attribute.name}#set($cont=$cont+1)#end
+        SELECT #foreach($attribute in $entity.attributes)#if($cont>0) ,#endc.${attribute.name}#set($cont=$cont+1)#end
         FROM ${entity.getVariableName()} as c
         #foreach($attribute in $entity.attributes)
         INNER JOIN ${attribute.name} as t ON c.${attribute.name}_id=${attribute.name}.id
@@ -31,7 +31,7 @@ let findAll = (req, res, next) => {
 let findBy${field.type} = (req, res, next) => {
     let ${field.name}Id = req.params.id;
     let sql = `
-        SELECT #foreach($attribute in $domain.attributes)#if($cont>0) ,#end$c.{attribute.name}#set($cont=$cont+1)#end
+        SELECT #foreach($attribute in $domain.attributes)#if($cont>0) ,#endc.${attribute.name}#set($cont=$cont+1)#end
         FROM ${domain.getVariableName()} as c;
     db.query(sql, [parseInt(teacherId)])
         .then(${entity.getVariableName()}s =>  res.json(${entity.getVariableName()}s))
@@ -45,7 +45,7 @@ let findBy${field.type} = (req, res, next) => {
 let findById = (req, res, next) => {
     let id = req.params.id;
     let sql = `
-        SELECT #foreach($attribute in $entity.attributes)#if($cont>0) ,#end$c.{attribute.name}#set($cont=$cont+1)#end
+        SELECT #foreach($attribute in $entity.attributes)#if($cont>0) ,#end c.${attribute.name}#set($cont=$cont+1)#end
         FROM ${entity.getVariableName()} as c
          #foreach($attribute in $entity.attributes)
         INNER JOIN ${attribute.name} as t ON c.${attribute.name}_id=${attribute.name}.id
