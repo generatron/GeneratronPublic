@@ -3,8 +3,8 @@
 #set ($author="Evol Johnson")
 #set ($overwrite="true")
 #set ($enabled="true")
-#set ($filep="${entity.name}s.js")
-#set ($filename="${outputDir}/www/js/services'${filep}")
+#set ($filep="${entity.getVariableName()}s.js")
+#set ($filename="${outputDir}/www/js/services/${filep}")
 #parse("common/utils.parse")
 import * as rest from './rest';
 

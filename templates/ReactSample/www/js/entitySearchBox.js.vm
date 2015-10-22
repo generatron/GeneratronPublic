@@ -1,0 +1,36 @@
+#set ($language="Javascript")
+#set ($description="Home")
+#set ($author="Evol Johnson")
+#set ($overwrite="true")
+#set ($enabled="true")
+#set ($filep="${entity.name}SearchBox.js")
+#set ($filename="${outputDir}/www/js/${filep}")
+#parse("common/utils.parse")
+import React from 'react';
+
+import * as ${entity.name}Service from './services/${entity.name}Service';
+
+import SearchBox from './components/SearchBox';
+
+export default React.createClass({
+
+    getInitialState() {
+        return {${entity.getVariableName()}s:[]}
+    },
+
+    keyChangeHandler(criteria) {
+        if (criteria) {
+            ${entity.name}Service.findBy${su.proper($entity.getComboFieldName())}(${entity.getComboFieldName()}).then(${entity.getVariableName()}s => this.setState({${entity.getVariableName()}s}));
+        }
+    },
+
+    render() {
+        return (
+            <SearchBox data={this.state.${entity.getVariableName()}s}
+                       placeholder={this.props.placeholder}
+                       onKeyChange={this.keyChangeHandler}
+                       onSelect={this.props.onSelect}/>
+        );
+    }
+
+});

@@ -3,7 +3,7 @@
 #set ($author="Evol Johnson")
 #set ($overwrite="true")
 #set ($enabled="true")
-#set ($filep="${entity.name}s.js")
+#set ($filep="${entity.getVariableName()}s.js")
 #set ($filename="${outputDir}/server/services/${filep}")
 #parse("common/utils.parse")
 "use strict";
